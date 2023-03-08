@@ -69,7 +69,6 @@ class _MyAppState extends State<MyApp> {
   themeListener() {
     if (mounted){
       setState(() {
-
       });
     }
   }

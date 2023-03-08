@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sonata/screens/play_song.dart';
+import 'package:sonata/utility/app_theme.dart';
 import 'package:sonata/utility/helper_widgets.dart';
 
 import '../components/song_model.dart';
@@ -13,7 +14,6 @@ class Explore extends StatefulWidget {
 }
 
 class _ExploreState extends State<Explore> {
-
   TextEditingController _searchController = TextEditingController();
 
   List<Song> _searchResults = [];
@@ -39,7 +39,7 @@ class _ExploreState extends State<Explore> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData _theme = Theme.of(context);
+    theme = Theme.of(context);
     TextTheme _textTheme = Theme.of(context).textTheme;
 
     return Padding(
@@ -47,12 +47,11 @@ class _ExploreState extends State<Explore> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 16.0),
           Text(
             'Explore',
-            style: _textTheme.headline5,
+            style: _textTheme.headline3,
           ),
-          SizedBox(height: 16.0),
+          SizedBox(height: 20.0),
           TextFormField(
             controller: _searchController,
             decoration: InputDecoration(
@@ -62,29 +61,29 @@ class _ExploreState extends State<Explore> {
                 borderSide: BorderSide.none,
               ),
               filled: true,
-              fillColor: _theme.cardColor,
+              fillColor: theme.dialogBackgroundColor,
               suffixIcon: Icon(Icons.search),
             ),
           ),
-          SizedBox(height: 16.0),
+          SizedBox(height: 20.0),
           _searchController.text.isNotEmpty
-              ? _buildSongs(_searchResults)
-              : _buildSongs(songs),
+              ? returnGrid(_searchResults)
+              : returnGrid(songs),
         ],
       ),
     );
   }
   
-  Widget returnGrid(List<Song> list){
+  Widget returnGrid(List<Song> list,){
     return Container(
       height: 800,
       child: GridView.builder(
         itemCount: list.length,
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
+          crossAxisSpacing: 15,
+          mainAxisSpacing: 15,
           childAspectRatio: 0.7,
         ),
         itemBuilder: (BuildContext context, int index) {
@@ -93,63 +92,60 @@ class _ExploreState extends State<Explore> {
             onTap: (){
               Navigator.push(context, MaterialPageRoute(builder: (context)=>MusicPlayerScreen(song: song)));
             },
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(10),
+            child: Material(
+              elevation: 5,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: theme.dialogBackgroundColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(10),
+                        ),
+                        child: Image.network(
+                          song.coverImage,
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                      child: Image.network(
-                        song.coverImage,
-                        fit: BoxFit.cover,
+                    ),
+                    addHeight(10),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                      ),
+                      child: Text(
+                        song.title,
+                        style: theme.textTheme.headline5,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 5,
-                    ),
-                    child: Text(
-                      song.title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 5,
-                    ),
-                    child: Text(
-                      song.artist,
-                      style: TextStyle(
-                        color: Colors.grey[700],
+                      child: Text(
+                        song.artist,
+                        style: theme.textTheme.bodyText2?.copyWith(color: theme.brightness==AppTheme.darkTheme.brightness?Colors.white60:Colors.black.withOpacity(.7)),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
                     ),
-                  ),
-                ],
+                    addHeight(5),
+                  ],
+                ),
               ),
             ),
           );
         },
       ),
     );
-  }
-
-  Widget _buildSongs(List<Song> list) {
-    return returnGrid(list);
   }
 }

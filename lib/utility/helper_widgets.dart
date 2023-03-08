@@ -3,6 +3,13 @@ import 'package:sonata/utility/theme_manager.dart';
 
 import '../constants.dart';
 
+String printDuration(Duration duration) {
+  String twoDigits(int n) => n.toString().padLeft(2, "0");
+  String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+  String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+  return "$twoDigitMinutes:$twoDigitSeconds";
+}
+
 Widget addHeight(double height){
   return SizedBox(height: height);
 }
@@ -13,7 +20,7 @@ Widget addWidth(double width){
 
 PreferredSizeWidget getAppBar(ThemeData _theme){
   return AppBar(toolbarHeight: 80,
-    backgroundColor: _theme.backgroundColor,
+    backgroundColor: _theme.appBarTheme.backgroundColor,
     title: getLogo(30),
     actions: [
       Switch(

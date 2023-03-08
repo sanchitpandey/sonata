@@ -1,10 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:sonata/constants.dart';
-import 'package:sonata/screens/login.dart';
-import 'package:sonata/utility/helper_functions.dart';
 
 import 'package:sonata/utility/helper_widgets.dart';
 
@@ -13,8 +8,9 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: const Color(0xFF202020),
+      backgroundColor: theme.canvasColor,
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -29,6 +25,9 @@ class SplashScreen extends StatelessWidget {
               ),
             ),
             Container(
+              decoration: BoxDecoration(
+                color: theme.primaryColorDark,
+              ),
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -60,7 +59,7 @@ class SplashScreen extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  const CircularProgressIndicator(),
+                   CircularProgressIndicator(backgroundColor: theme.primaryColor,),
                 ],
               ),
             ),

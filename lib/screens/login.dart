@@ -33,10 +33,10 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData _theme = Theme.of(context);
+    theme = Theme.of(context);
     TextTheme _textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: getAppBar( _theme),
+      appBar: getAppBar( theme),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -60,7 +60,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 decoration: InputDecoration(
                   hintText: 'Email',
                   filled: true,
-                  fillColor: _theme.dialogBackgroundColor,
+                  fillColor: theme.dialogBackgroundColor,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),
@@ -74,7 +74,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 decoration: InputDecoration(
                   hintText: 'Password',
                   filled: true,
-                  fillColor: _theme.dialogBackgroundColor,
+                  fillColor: theme.dialogBackgroundColor,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
                   ),

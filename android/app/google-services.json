@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "491411595954",
+    "project_id": "sonata-509ef",
+    "storage_bucket": "sonata-509ef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491411595954:android:31fdd01bd7593958a85fab",
+        "android_client_info": {
+          "package_name": "com.sanchit.sonata"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "491411595954-pp0673m1dv55g5avtr3d3akfgp03fdo6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6H8GAQHjh2Sv1-SGpVI0BxMl7v1yyBFk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "491411595954-pp0673m1dv55g5avtr3d3akfgp03fdo6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

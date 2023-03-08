@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sonata/constants.dart';
+import 'package:sonata/screens/home.dart';
 import 'package:sonata/screens/login.dart';
 import 'package:sonata/screens/splash.dart';
 import 'package:sonata/utility/app_theme.dart';
@@ -30,22 +31,22 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      themeMode: themeManager.themeMode,
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.active) {
-            User user = snapshot.data;
+            User? user = snapshot.data;
             if (user == null) {
-              return LoginPage();
+              return AuthScreen();
             } else {
-              return HomePage();
+              return Home();
             }
           } else {
-            return Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
+            return SplashScreen();
           }
         },
       ),

@@ -8,14 +8,9 @@ import 'package:sonata/utility/helper_functions.dart';
 
 import 'package:sonata/utility/helper_widgets.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,14 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   const SizedBox(
                     height: 20,
                   ),
-                  ElevatedButton(
-                    onPressed: () => Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => AuthScreen(),
-                        )),
-                    child: Text("Next"),
-                  ),
+                  const CircularProgressIndicator(),
                 ],
               ),
             ),
@@ -80,10 +68,5 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
   }
 }

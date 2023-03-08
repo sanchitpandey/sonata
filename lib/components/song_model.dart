@@ -6,6 +6,7 @@ class Song {
   String artist;
   String genre;
   String album;
+  String url;
   String coverImage;
 
   Song({
@@ -14,6 +15,7 @@ class Song {
     required this.artist,
     required this.genre,
     required this.album,
+    required this.url,
     required this.coverImage,
   });
 
@@ -25,6 +27,7 @@ class Song {
       artist: data['artist'],
       genre: data['genre'],
       album: data['album'],
+      url: data['url'],
       coverImage: data['coverImage'],
     );
   }
@@ -35,6 +38,7 @@ class Song {
       'artist': artist,
       'genre': genre,
       'album': album,
+      'url': url,
       'coverImage': coverImage,
     };
   }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:sonata/screens/explore.dart';
+import 'package:sonata/screens/play_song.dart';
 import 'package:sonata/utility/helper_widgets.dart';
+
+import '../constants.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -44,6 +47,7 @@ class _HomeState extends State<Home> {
   }
 
   getPage() {
+    //return MusicPlayerScreen(song: songs[1]);
     return Explore();
   }
 }

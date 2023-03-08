@@ -1,5 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sonata/constants.dart';
 import 'package:sonata/utility/helper_widgets.dart';
 
@@ -31,6 +32,18 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     });
     player.onPositionChanged
         .listen((Duration p) => {setState(() => position = p)});
+    player.onPlayerComplete.listen((event) {
+      onComplete();
+      setState(() {
+      });
+    });
+
+  }
+
+  void onComplete() {
+    isPlaying=false;
+    player.stop();
+    position=Duration.zero;
   }
 
   @override
@@ -80,29 +93,30 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                 onPressed: () {},
               ),
               const SizedBox(width: 32),
-              isLoading?CircularProgressIndicator(backgroundColor: theme.primaryColor, valueColor: null, color: theme.dialogBackgroundColor,):IconButton(
-                iconSize: playerIconSize,
-                icon: Icon(
-                  isPlaying
-                      ? Icons.pause_circle_filled
-                      : Icons.play_circle_filled,
-                ),
-                onPressed: () {
-                  if (isPlaying)
-                    {
-                      player.pause();
-                      isPlaying = false;
-                    }
-                  else
-                  {
-                    player.resume();
-                    isPlaying = true;
-                  }
-                  setState(() {
-
-                  });
-                },
-              ),
+              isLoading
+                  ? CircularProgressIndicator(
+                      backgroundColor: theme.primaryColor,
+                      valueColor: null,
+                      color: theme.dialogBackgroundColor,
+                    )
+                  : IconButton(
+                      iconSize: playerIconSize,
+                      icon: Icon(
+                        isPlaying
+                            ? Icons.pause_circle_filled
+                            : Icons.play_circle_filled,
+                      ),
+                      onPressed: () {
+                        if (isPlaying) {
+                          player.pause();
+                          isPlaying = false;
+                        } else {
+                          player.resume();
+                          isPlaying = true;
+                        }
+                        setState(() {});
+                      },
+                    ),
               const SizedBox(width: 32),
               IconButton(
                 iconSize: playerIconSize,
@@ -114,25 +128,48 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
             ],
           ),
           const SizedBox(height: 32),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(printDuration(position)),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * .65,
-                  height: 4,
-                  child: const LinearProgressIndicator(
-                    value: 0.5,
-                    backgroundColor: Colors.grey,
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+          isLoading
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(printDuration(position)),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * .65,
+                        height: 4,
+                        child: const LinearProgressIndicator(
+                          value: 0,
+                          backgroundColor: Colors.grey,
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.blue),
+                        ),
+                      ),
+                      Text(printDuration(duration)),
+                    ],
+                  ),
+                )
+              : Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(printDuration(position)),
+                      Expanded(
+                        child: Slider(
+                          activeColor: theme.primaryColorDark,
+                          inactiveColor: theme.primaryColorLight,
+                          max: duration.inMilliseconds.toDouble()+1,
+                          value: position.inMilliseconds.toDouble(),
+                          onChanged: (value) {
+                            player.seek(Duration(milliseconds: value.toInt()));
+                          },
+                        ),
+                      ),
+                      Text(printDuration(duration)),
+                    ],
                   ),
                 ),
-                Text(printDuration(duration)),
-              ],
-            ),
-          ),
         ],
       ),
     );

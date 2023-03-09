@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sonata/components/playlist_model.dart';
 import 'package:sonata/components/playlist_tile.dart';
+import 'package:sonata/screens/playlist_screen.dart';
 import 'package:sonata/utility/helper_widgets.dart';
 
 import '../constants.dart';
@@ -53,9 +54,13 @@ class _LibraryState extends State<Library> {
                 playlists.add({
                   'name': _nameController.text.toString(),
                   'created_by': user?.uid,
+                  'songIds': <String>[],
+                  'imageUrl': '',
                 }).then((value) {
                   getData();
-                  SnackBar(content: Text("Added"),);
+                  SnackBar(
+                    content: Text("Added"),
+                  );
                   Navigator.of(context).pop();
                 });
               },
@@ -70,12 +75,11 @@ class _LibraryState extends State<Library> {
   void getData() {
     playlistData.clear();
     playlists.where('created_by', isEqualTo: user?.uid).get().then((value) {
-      for (DocumentSnapshot doc in value.docs){
+      for (DocumentSnapshot doc in value.docs) {
+        log(doc.data().toString());
         playlistData.add(Playlist.fromJson(doc));
       }
-      setState(() {
-
-      });
+      setState(() {});
     });
   }
 
@@ -91,7 +95,7 @@ class _LibraryState extends State<Library> {
     TextTheme _textTheme = Theme.of(context).textTheme;
 
     return Container(
-      margin: const EdgeInsets.only(top: 20,left: 20,right: 20),
+      margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -122,10 +126,21 @@ class _LibraryState extends State<Library> {
           addHeight(20),
           Expanded(
             child: ListView.builder(
-              shrinkWrap: true,
+                shrinkWrap: true,
                 itemCount: playlistData.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return PlaylistTile(playlist: playlistData[index]);
+                  return GestureDetector(
+                      onTap: () async {
+                        await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PlaylistScreen(
+                                    playlist: playlistData[index])));
+                        setState(() {
+
+                        });
+                      },
+                      child: PlaylistTile(playlist: playlistData[index]));
                 }),
           ),
         ],

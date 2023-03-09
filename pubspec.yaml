@@ -46,6 +46,8 @@ dependencies:
   audioplayers: ^3.0.1
   miniplayer: ^1.0.1
   fluttertoast: ^8.2.1
+  image_picker: ^0.8.7
+  firebase_storage: ^11.0.15
 
 dev_dependencies:
   flutter_test:

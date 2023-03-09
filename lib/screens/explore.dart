@@ -77,6 +77,7 @@ class _ExploreState extends State<Explore> {
   Widget returnGrid(List<Song> list,){
     return Expanded(
       child: GridView.builder(
+        shrinkWrap: true,
         itemCount: list.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,

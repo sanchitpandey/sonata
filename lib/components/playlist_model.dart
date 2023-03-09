@@ -4,7 +4,7 @@ class Playlist {
   String id;
   String name;
   String imageUrl;
-  List<String> songIds;
+  List songIds;
   String createdBy;
 
   Playlist({
@@ -16,9 +16,13 @@ class Playlist {
   });
 
   factory Playlist.fromJson(DocumentSnapshot doc) {
-    return Playlist(id: doc.id, name: doc.get('name'), imageUrl: '', songIds: [], createdBy: doc.get('created_by'));
+    return Playlist(
+        id: doc.id,
+        name: doc.get('name'),
+        imageUrl: doc.get('imageUrl'),
+        songIds: doc.get('songIds'),
+        createdBy: doc.get('created_by'));
   }
-
 
   factory Playlist.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
@@ -27,7 +31,7 @@ class Playlist {
       name: data['name'],
       imageUrl: data['imageUrl'],
       songIds: List<String>.from(data['songIds']),
-      createdBy: data['createdBy'],
+      createdBy: data['created_by'],
     );
   }
 
@@ -36,7 +40,7 @@ class Playlist {
       'name': name,
       'imageUrl': imageUrl,
       'songIds': songIds,
-      'createdBy': createdBy,
+      'created_by': createdBy,
     };
   }
 }

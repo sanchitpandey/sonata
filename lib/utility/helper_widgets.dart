@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sonata/utility/theme_manager.dart';
 
 import '../constants.dart';
+import 'app_theme.dart';
 
 String printDuration(Duration duration) {
   String twoDigits(int n) => n.toString().padLeft(2, "0");
@@ -18,11 +19,22 @@ Widget addWidth(double width){
   return SizedBox(width: width);
 }
 
+Widget getIndicator(){
+  return CircularProgressIndicator(
+    backgroundColor: AppTheme.darkTheme.primaryColor,
+    valueColor: null,
+    color: theme.primaryColorLight,
+  );
+}
+
 PreferredSizeWidget getAppBar(ThemeData _theme){
   return AppBar(toolbarHeight: 80,
     backgroundColor: _theme.appBarTheme.backgroundColor,
     title: getLogo(30),
     actions: [
+      IconButton(onPressed: (){
+        auth.signOut();
+      }, icon: Icon(Icons.logout_outlined,), iconSize: 30,),
       Switch(
           value: themeManager.themeMode == ThemeMode.dark,
           onChanged: (isDark) {

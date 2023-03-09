@@ -13,6 +13,7 @@ class PlaylistTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    theme = Theme.of(context);
     log(playlist.songIds.toString());
     return Container(
       color: theme.cardColor,
@@ -42,16 +43,13 @@ class PlaylistTile extends StatelessWidget {
               children: [
                 Text(
                   playlist.name,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: theme.textTheme.headline5,
                 ),
                 SizedBox(height: 4),
                 // P
                 Text(
                   '${playlist.songIds.length} Songs',
-                  style: TextStyle(fontSize: 16),
+                  style: theme.textTheme.bodyText1
                 ),
               ],
             ),

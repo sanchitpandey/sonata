@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sonata/components/playlist_model.dart';
 import 'package:sonata/utility/app_theme.dart';
 import 'package:sonata/utility/theme_manager.dart';
 

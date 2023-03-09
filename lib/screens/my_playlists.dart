@@ -11,14 +11,14 @@ import 'package:sonata/utility/helper_widgets.dart';
 
 import '../constants.dart';
 
-class Library extends StatefulWidget {
-  const Library({Key? key}) : super(key: key);
+class MyPlaylists extends StatefulWidget {
+  const MyPlaylists({Key? key}) : super(key: key);
 
   @override
-  State<Library> createState() => _LibraryState();
+  State<MyPlaylists> createState() => _MyPlaylistsState();
 }
 
-class _LibraryState extends State<Library> {
+class _MyPlaylistsState extends State<MyPlaylists> {
   List<Playlist> playlistData = [];
 
   Widget getNameDialog(BuildContext context) {
@@ -118,7 +118,7 @@ class _LibraryState extends State<Library> {
                     padding: const EdgeInsets.all(8.0),
                     child: Icon(
                         size: playerIconSize - 10,
-                        Icons.thumb_up_off_alt_outlined),
+                        Icons.bookmark_border_rounded),
                   ),
                 ),
               ),

@@ -1,24 +1,23 @@
 import 'dart:developer';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sonata/components/playlist_model.dart';
-import 'package:sonata/components/song_model.dart';
-import 'package:sonata/screens/home.dart';
 import 'package:sonata/screens/play_song.dart';
 import 'package:sonata/screens/song_adding.dart';
+import 'package:sonata/utility/app_theme.dart';
+import 'package:sonata/utility/helper_functions.dart';
 
 import '../constants.dart';
 import '../utility/helper_widgets.dart';
 
 class PlaylistScreen extends StatefulWidget {
-  final Playlist playlist;
+  Playlist playlist;
 
-  const PlaylistScreen({Key? key, required this.playlist}) : super(key: key);
+  PlaylistScreen({Key? key, required this.playlist}) : super(key: key);
 
   @override
   _PlaylistScreenState createState() => _PlaylistScreenState();
@@ -53,10 +52,15 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                   (await uploadTask.whenComplete(() {}));
 
               final String url = (await downloadUrl.ref.getDownloadURL());
-              playlists.doc(playlist.id).update({'imageUrl': url}).then(
-                  (value) { Fluttertoast.showToast(msg: "Uploaded");setState(() {
+              playlists
+                  .doc(playlist.id)
+                  .update({'imageUrl': url}).then((value) {
+                Fluttertoast.showToast(msg: "Uploaded");
+                widget.playlist = Playlist(id: playlist.id, name: playlist.name, imageUrl: url, songIds: playlist.songIds, createdBy: playlist.createdBy);
+                setState(() {
 
-                  });});
+                });
+              });
             },
             child: Image.network(
               height: 250,
@@ -75,25 +79,47 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
             ),
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: theme.primaryColorLight,
+                  color: theme.primaryColor,
                 ),
                 child: IconButton(
                   icon: Icon(Icons.play_arrow),
-                  onPressed: () =>Navigator.push(
+                  onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => MusicPlayerScreen(
-                            playlist: playlist.getSongList(),
-                            currentSongIndex: 0,
-                          ))),
+                                playlist: playlist.getSongList(),
+                                currentSongIndex: 0,
+                              ))),
                 ),
               ),
-              SizedBox(
+              addWidth(30),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: theme.primaryColor,
+                ),
+                child: IconButton(
+                  icon: Icon(Icons.thumb_up_off_alt_outlined),
+                  onPressed: () {
+                    users.doc(user?.uid).get().then((value) {
+                      List liked = value.get('liked');
+                      if (!liked.contains(playlist.id))
+                        liked.add(playlist.id);
+                      users.doc(user?.uid).update({
+                        'liked': liked,
+                      }).then((value) {showMsg("Liked Successfully");});
+                    });
+
+                  },
+                ),
+              ),
+              addWidth(30),
+              (playlist.createdBy==user?.uid)?SizedBox(
                 height: 50,
                 width: 200,
                 child: MaterialButton(
@@ -115,7 +141,14 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(size: 30, Icons.add),
+                      Icon(
+                          size: 30,
+                          Icons.add_box_rounded,
+                          color: theme.backgroundColor ==
+                                  AppTheme.darkTheme.backgroundColor
+                              ? Colors.white
+                              : Colors.black),
+                      addWidth(10),
                       Text(
                         "Add Song",
                         style: theme.textTheme.headline5,
@@ -123,7 +156,7 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                     ],
                   ),
                 ),
-              ),
+              ):SizedBox(),
             ],
           ),
           addHeight(20),

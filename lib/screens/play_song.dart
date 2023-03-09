@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -102,9 +104,13 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
-          Text(
-            song.artist,
-            style: const TextStyle(fontSize: 18),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(song.artist+"  /  "+song.genre,
+                style: theme.textTheme.headline5?.copyWith(fontWeight: FontWeight.w400),
+              ),
+            ],
           ),
           const SizedBox(height: 32),
           Row(
@@ -137,11 +143,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                       }
                     : null,
               ),
-              isLoading? CircularProgressIndicator(
-                backgroundColor: AppTheme.darkTheme.primaryColor,
-                valueColor: null,
-                color: theme.primaryColorLight,
-              ):IconButton(
+              isLoading? getIndicator():IconButton(
                 iconSize: playerIconSize*1.5,
                 icon: Icon(
                   isPlaying ? Icons.pause_circle_filled : Icons.play_circle_fill,
@@ -212,6 +214,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
   void shufflePlaylist() {
     setState(() {
       widget.playlist.shuffle();
+      log(widget.playlist.toString());
 
       Navigator.pushReplacement(
         context,

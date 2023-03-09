@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sonata/constants.dart';
 import 'package:sonata/screens/home.dart';
@@ -21,10 +22,8 @@ class _AuthScreenState extends State<AuthScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-
   @override
   void initState() {
-
     super.initState();
   }
 
@@ -34,79 +33,91 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     theme = Theme.of(context);
-    TextTheme _textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: getAppBar( theme),
+      appBar: getAppBar(theme),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              addHeight(32),
-              Text(
-                _authMode == AuthMode.Login ? 'Welcome back!' : 'Welcome!',
-              ),
-              addHeight(16),
-              Text(
-                _authMode == AuthMode.Login
-                    ? 'Please enter your email and password to login'
-                    : 'Please enter your email and password to sign up',
-              ),
-              addHeight(32),
-              TextField(
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  hintText: 'Email',
-                  filled: true,
-                  fillColor: theme.dialogBackgroundColor,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                addHeight(100),
+                Text(
+                  _authMode == AuthMode.Login ? 'Welcome back!' : 'Welcome!',
+                  style: theme.textTheme.headline3,
                 ),
-              ),
-              addHeight(16),
-              TextField(
-                controller: _passwordController,
-                obscureText: true,
-                keyboardType: TextInputType.visiblePassword,
-                decoration: InputDecoration(
-                  hintText: 'Password',
-                  filled: true,
-                  fillColor: theme.dialogBackgroundColor,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                ),
-              ),
-              addHeight(32),
-              _loading
-                  ? const CircularProgressIndicator()
-                  : ElevatedButton(
-                      onPressed: () {
-                        _handleAuth();
-                      },
-                      child: Text(
-                        _authMode == AuthMode.Login ? 'Login' : 'Sign Up',
-                      ),
-                    ),
-              addHeight(16),
-              TextButton(
-                onPressed: () {
-                  setState(() {
-                    _authMode = _authMode == AuthMode.Login
-                        ? AuthMode.SignUp
-                        : AuthMode.Login;
-                  });
-                },
-                child: Text(
+                addHeight(16),
+                Text(
                   _authMode == AuthMode.Login
-                      ? 'New user? Sign up'
-                      : 'Already have an account? Login',
+                      ? 'Please enter your email and password to login'
+                      : 'Please enter your email and password to sign up',
+                  style: theme.textTheme.bodyText1,
                 ),
-              ),
-            ],
+                addHeight(32),
+                TextField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    hintText: 'Email',
+                    filled: true,
+                    fillColor: theme.dialogBackgroundColor,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                ),
+                addHeight(16),
+                TextField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  keyboardType: TextInputType.visiblePassword,
+                  decoration: InputDecoration(
+                    hintText: 'Password',
+                    filled: true,
+                    fillColor: theme.dialogBackgroundColor,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                ),
+                addHeight(32),
+                _loading
+                    ? const CircularProgressIndicator()
+                    : ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: theme.primaryColor),
+                        onPressed: () {
+                          _handleAuth();
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Text(
+                            _authMode == AuthMode.Login ? 'Login' : 'Sign Up',
+                            style: theme.textTheme.headline5
+                                ?.copyWith(fontWeight: FontWeight.w500),
+                          ),
+                        ),
+                      ),
+                addHeight(16),
+                MaterialButton(
+                  onPressed: () {
+                    setState(() {
+                      _authMode = _authMode == AuthMode.Login
+                          ? AuthMode.SignUp
+                          : AuthMode.Login;
+                    });
+                  },
+                  child: Text(
+                    _authMode == AuthMode.Login
+                        ? 'New user? Sign up'
+                        : 'Already have an account? Login',
+                    style: theme.textTheme.headline5
+                        ?.copyWith(fontWeight: FontWeight.w400),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -133,7 +144,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
         await firestore.collection('users').doc(userCredential.user?.uid).set({
           'email': _emailController.text,
-          'liked':<String>[],
+          'liked': <String>[],
         });
       }
 
@@ -148,16 +159,16 @@ class _AuthScreenState extends State<AuthScreen> {
       });
 
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        Fluttertoast.showToast(msg: 'No user found for that email.');
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+        Fluttertoast.showToast(msg: 'Wrong password provided for that user.');
       } else if (e.code == 'email-already-in-use') {
-        print('The email address is already in use by another account.');
+        Fluttertoast.showToast(msg: 'The email address is already in use by another account.');
       } else {
-        print('Error: ${e.code}');
+        Fluttertoast.showToast(msg: 'Error: ${e.code}');
       }
     } catch (e) {
-      print('Error: $e');
+      Fluttertoast.showToast(msg: 'Error: $e');
     }
   }
 }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:sonata/screens/all_playlists.dart';
 import 'package:sonata/screens/explore.dart';
 import 'package:sonata/screens/play_song.dart';
 import 'package:sonata/utility/helper_widgets.dart';
 
 import '../constants.dart';
-import 'library.dart';
+import 'my_playlists.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -39,6 +40,7 @@ class _HomeState extends State<Home> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: "Home"),
           BottomNavigationBarItem(icon: Icon(Icons.search_outlined), label: "Explore"),
+          BottomNavigationBarItem(icon: Icon(Icons.library_books_outlined), label: "Library"),
         ],
       ),
     );
@@ -46,8 +48,10 @@ class _HomeState extends State<Home> {
 
   getPage() {
     if (index==0)
-      return Library();
+      return MyPlaylists();
     else if (index == 1)
       return Explore();
+    else
+      return AllPlaylists();
   }
 }

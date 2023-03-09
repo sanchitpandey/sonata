@@ -20,19 +20,20 @@ class _LikedPlaylistsState extends State<LikedPlaylists> {
   bool isLoading = true;
 
   void getLikedPlaylist() async{
-    users.where('email', isEqualTo: user?.email).get().then((value) {
-      log(value.docs[0].get('liked'));
+    users.doc(user?.uid).get().then((value) {
+      List liked = (value.get('liked'));
       likedPlaylist.clear();
 
-      for (String likedID in value.docs[0].get('liked')){
+      for (String likedID in liked){
         playlists.doc(likedID).get().then((value){
           likedPlaylist.add(Playlist.fromJson(value));
+          setState(() {
+            isLoading = false;
+          });
         });
       }
-      isLoading = false;
-      setState(() {
 
-      });
+
     });
   }
 
@@ -44,7 +45,9 @@ class _LikedPlaylistsState extends State<LikedPlaylists> {
 
   @override
   Widget build(BuildContext context) {
+    theme = Theme.of(context);
     TextTheme _textTheme = theme.textTheme;
+    log(likedPlaylist.toString());
 
     return Scaffold(
       appBar: getAppBar(theme),
@@ -64,7 +67,7 @@ class _LikedPlaylistsState extends State<LikedPlaylists> {
               ],
             ),
             addHeight(20),
-            isLoading?CircularProgressIndicator():Expanded(
+            isLoading?getIndicator():Expanded(
               child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: likedPlaylist.length,

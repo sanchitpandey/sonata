@@ -1,12 +1,15 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:sonata/components/playlist_model.dart';
+import 'package:sonata/components/song_model.dart';
 import 'package:sonata/screens/home.dart';
+import 'package:sonata/screens/play_song.dart';
 import 'package:sonata/screens/song_adding.dart';
 
 import '../constants.dart';
@@ -39,18 +42,27 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
           GestureDetector(
             onTap: () async {
               final picker = ImagePicker();
-              final pickedFile = await picker.getImage(source: ImageSource.gallery);
-              final Reference storageRef =
-              _storage.ref().child('folderName/${DateTime.now().toString()}');
-              final UploadTask uploadTask = storageRef.putFile(File(pickedFile!.path));
-              final TaskSnapshot downloadUrl = (await uploadTask.whenComplete(() {}));
+              final pickedFile =
+                  await picker.pickImage(source: ImageSource.gallery);
+              final Reference storageRef = _storage
+                  .ref()
+                  .child('folderName/${DateTime.now().toString()}');
+              final UploadTask uploadTask =
+                  storageRef.putFile(File(pickedFile!.path));
+              final TaskSnapshot downloadUrl =
+                  (await uploadTask.whenComplete(() {}));
 
               final String url = (await downloadUrl.ref.getDownloadURL());
-              playlists.doc(playlist.id).update({'imageUrl':url}).then((value) => Fluttertoast.showToast(msg: "Uploaded"));
+              playlists.doc(playlist.id).update({'imageUrl': url}).then(
+                  (value) { Fluttertoast.showToast(msg: "Uploaded");setState(() {
+
+                  });});
             },
             child: Image.network(
               height: 250,
-              playlist.imageUrl.isEmpty ? songs[0].coverImage : playlist.imageUrl,
+              playlist.imageUrl.isEmpty
+                  ? songs[0].coverImage
+                  : playlist.imageUrl,
               fit: BoxFit.fitHeight,
             ),
           ),
@@ -62,33 +74,57 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
               textAlign: TextAlign.center,
             ),
           ),
-          SizedBox(
-            height: 50,
-            width: 200,
-            child: MaterialButton(
-              color: theme.primaryColorLight,
-              onPressed: () async {
-                await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            AddSongsScreen(playlist: playlist)));
-                await playlists.doc(playlist.id).set(playlist.toFirestore());
-                setState(() {
-
-                });
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(size: 30, Icons.add),
-                  Text(
-                    "Add Song",
-                    style: theme.textTheme.headline5,
-                  ),
-                ],
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: theme.primaryColorLight,
+                ),
+                child: IconButton(
+                  icon: Icon(Icons.play_arrow),
+                  onPressed: () =>Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MusicPlayerScreen(
+                            playlist: playlist.getSongList(),
+                            currentSongIndex: 0,
+                          ))),
+                ),
               ),
-            ),
+              SizedBox(
+                height: 50,
+                width: 200,
+                child: MaterialButton(
+                  color: theme.primaryColorLight,
+                  onPressed: () async {
+                    await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                AddSongsScreen(playlist: playlist)));
+                    setState(() {});
+                    playlists
+                        .doc(playlist.id)
+                        .set(playlist.toFirestore())
+                        .then((value) {
+                      setState(() {});
+                    });
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(size: 30, Icons.add),
+                      Text(
+                        "Add Song",
+                        style: theme.textTheme.headline5,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
           addHeight(20),
           Expanded(
@@ -105,7 +141,13 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                       songs[songId].title,
                       style: theme.textTheme.bodyText1,
                     ),
-                    onTap: () {},
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MusicPlayerScreen(
+                                  playlist: playlist.getSongList(),
+                                  currentSongIndex: index,
+                                ))),
                   ),
                 );
               },

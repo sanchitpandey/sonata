@@ -133,6 +133,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
         await firestore.collection('users').doc(userCredential.user?.uid).set({
           'email': _emailController.text,
+          'liked':<String>[],
         });
       }
 

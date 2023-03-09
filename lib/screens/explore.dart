@@ -90,7 +90,7 @@ class _ExploreState extends State<Explore> {
             margin: EdgeInsets.only(bottom: 20),
             child: GestureDetector(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>MusicPlayerScreen(song: song)));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>MusicPlayerScreen(playlist: [song], currentSongIndex: 0,)));
               },
               child: Material(
                 elevation: 5,

@@ -2,8 +2,10 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:sonata/components/playlist_model.dart';
 import 'package:sonata/components/playlist_tile.dart';
+import 'package:sonata/screens/liked_playlist.dart';
 import 'package:sonata/screens/playlist_screen.dart';
 import 'package:sonata/utility/helper_widgets.dart';
 
@@ -21,7 +23,6 @@ class _LibraryState extends State<Library> {
 
   Widget getNameDialog(BuildContext context) {
     TextEditingController _nameController = TextEditingController();
-    bool inProgress = false;
 
     return Dialog(
       backgroundColor: theme.canvasColor,
@@ -58,13 +59,11 @@ class _LibraryState extends State<Library> {
                   'imageUrl': '',
                 }).then((value) {
                   getData();
-                  SnackBar(
-                    content: Text("Added"),
-                  );
+                  Fluttertoast.showToast(msg: "Added");
                   Navigator.of(context).pop();
                 });
               },
-              child: Text("Add"),
+              child: const Text("Add"),
             )
           ],
         ),
@@ -103,9 +102,27 @@ class _LibraryState extends State<Library> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'All Playlists',
+                'My Playlists',
                 style: _textTheme.headline3,
               ),
+              const Spacer(),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> LikedPlaylists()));
+                },
+                child: Material(
+                  elevation: 4,
+                  color: theme.dialogBackgroundColor,
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                        size: playerIconSize - 10,
+                        Icons.thumb_up_off_alt_outlined),
+                  ),
+                ),
+              ),
+              addWidth(30),
               GestureDetector(
                 onTap: () {
                   showDialog(
@@ -117,8 +134,10 @@ class _LibraryState extends State<Library> {
                 child: Material(
                   elevation: 4,
                   color: theme.dialogBackgroundColor,
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  child: Icon(size: playerIconSize, Icons.add),
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Icon(size: playerIconSize - 10, Icons.add)),
                 ),
               ),
             ],
@@ -136,9 +155,7 @@ class _LibraryState extends State<Library> {
                             MaterialPageRoute(
                                 builder: (context) => PlaylistScreen(
                                     playlist: playlistData[index])));
-                        setState(() {
-
-                        });
+                        setState(() {});
                       },
                       child: PlaylistTile(playlist: playlistData[index]));
                 }),

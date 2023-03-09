@@ -1,4 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sonata/components/song_model.dart';
+
+import '../constants.dart';
 
 class Playlist {
   String id;
@@ -14,6 +17,14 @@ class Playlist {
     required this.songIds,
     required this.createdBy,
   });
+
+  List<Song> getSongList(){
+    List<Song> playlist = [];
+    for (String songID in songIds){
+      playlist.add(songs[int.parse(songID)-1]);
+    }
+    return playlist;
+  }
 
   factory Playlist.fromJson(DocumentSnapshot doc) {
     return Playlist(

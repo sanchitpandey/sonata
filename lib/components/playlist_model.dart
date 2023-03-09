@@ -15,6 +15,11 @@ class Playlist {
     required this.createdBy,
   });
 
+  factory Playlist.fromJson(DocumentSnapshot doc) {
+    return Playlist(id: doc.id, name: doc.get('name'), imageUrl: '', songIds: [], createdBy: doc.get('created_by'));
+  }
+
+
   factory Playlist.fromFirestore(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return Playlist(

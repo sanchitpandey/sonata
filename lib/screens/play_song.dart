@@ -57,6 +57,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
     theme = Theme.of(context);
     return Scaffold(
       appBar: getAppBar(theme),
+      backgroundColor: theme.backgroundColor,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,

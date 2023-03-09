@@ -4,6 +4,7 @@ import 'package:sonata/screens/play_song.dart';
 import 'package:sonata/utility/helper_widgets.dart';
 
 import '../constants.dart';
+import 'library.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -13,41 +14,40 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  int index = 1;
+
   @override
   Widget build(BuildContext context) {
-    ThemeData _theme = Theme.of(context);
-    TextTheme _textTheme = Theme.of(context).textTheme;
-    int _index = 0;
+    ThemeData theme = Theme.of(context);
+    TextTheme textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      appBar: getAppBar(_theme),
-      body: SingleChildScrollView(
-        child: getPage(),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: BottomNavigationBar(
-          onTap: (value){
-            setState(() {
-              _index=value;
-            });
-          },
-          currentIndex: _index,
-          type: BottomNavigationBarType.fixed,
-          showUnselectedLabels: false,
-          elevation: 5,
-          backgroundColor: _theme.bottomAppBarColor,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: "Home"),
-            BottomNavigationBarItem(icon: Icon(Icons.search_outlined), label: "Explore"),
-          ],
-        ),
+      appBar: getAppBar(theme),
+      body: getPage(),
+      backgroundColor: theme.backgroundColor,
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: (value){
+          setState(() {
+            index=value;
+          });
+        },
+        currentIndex: index,
+        type: BottomNavigationBarType.fixed,
+        showUnselectedLabels: false,
+        elevation: 10,
+        backgroundColor: theme.bottomAppBarColor,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.search_outlined), label: "Explore"),
+        ],
       ),
     );
   }
 
   getPage() {
-    //return MusicPlayerScreen(song: songs[1]);
-    return Explore();
+    if (index==0)
+      return Library();
+    else if (index == 1)
+      return Explore();
   }
 }

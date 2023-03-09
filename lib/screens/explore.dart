@@ -42,8 +42,8 @@ class _ExploreState extends State<Explore> {
     theme = Theme.of(context);
     TextTheme _textTheme = Theme.of(context).textTheme;
 
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
+    return Container(
+      margin: const EdgeInsets.only(top: 20,left: 20,right: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -75,71 +75,71 @@ class _ExploreState extends State<Explore> {
   }
   
   Widget returnGrid(List<Song> list,){
-    return Container(
-      height: 800,
+    return Expanded(
       child: GridView.builder(
         itemCount: list.length,
-        physics: const NeverScrollableScrollPhysics(),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 15,
-          mainAxisSpacing: 15,
-          childAspectRatio: 0.7,
+          childAspectRatio: 0.67,
         ),
         itemBuilder: (BuildContext context, int index) {
           final song = list[index];
-          return GestureDetector(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>MusicPlayerScreen(song: song)));
-            },
-            child: Material(
-              elevation: 5,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: theme.dialogBackgroundColor,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: ClipRRect(
-                        borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(10),
+          return Container(
+            margin: EdgeInsets.only(bottom: 20),
+            child: GestureDetector(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>MusicPlayerScreen(song: song)));
+              },
+              child: Material(
+                elevation: 5,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: theme.dialogBackgroundColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(10),
+                          ),
+                          child: Image.network(
+                            song.coverImage,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                        child: Image.network(
-                          song.coverImage,
-                          fit: BoxFit.cover,
+                      ),
+                      addHeight(10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                        ),
+                        child: Text(
+                          song.title,
+                          style: theme.textTheme.headline5,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
                         ),
                       ),
-                    ),
-                    addHeight(10),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 5,
+                        ),
+                        child: Text(
+                          song.artist,
+                          style: theme.textTheme.bodyText2?.copyWith(color: theme.brightness==AppTheme.darkTheme.brightness?Colors.white60:Colors.black.withOpacity(.7)),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                        ),
                       ),
-                      child: Text(
-                        song.title,
-                        style: theme.textTheme.headline5,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
-                      ),
-                      child: Text(
-                        song.artist,
-                        style: theme.textTheme.bodyText2?.copyWith(color: theme.brightness==AppTheme.darkTheme.brightness?Colors.white60:Colors.black.withOpacity(.7)),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                    ),
-                    addHeight(5),
-                  ],
+                      addHeight(5),
+                    ],
+                  ),
                 ),
               ),
             ),

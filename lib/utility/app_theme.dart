@@ -12,7 +12,7 @@ class AppTheme {
 // Colors for the light theme
   static const Color _lightPrimaryColor = Color(0xFFD1C4E9);
   static const Color _lightAccentColor = Color(0xFFFF80AB);
-  static const Color _lightBackgroundColor = Color(0xFFFFFFFF);
+  static const Color _lightBackgroundColor = Color(0xFFf3f3f3);
   static const Color _lightButtonColor = Color(0xFFFFF59D);
   static const Color _lightTextColor = Color(0xFF000000);
 

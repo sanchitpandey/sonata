@@ -2,8 +2,6 @@ import 'dart:developer';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sonata/components/playlist_model.dart';
 import 'package:sonata/constants.dart';
 import 'package:sonata/utility/app_theme.dart';
 import 'package:sonata/utility/helper_widgets.dart';
@@ -46,7 +44,9 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
       onComplete();
       setState(() {
         if (widget.currentSongIndex < widget.playlist.length - 1) {
-          // Play the next song in the playlist
+          //widget.currentSongIndex+=1;
+          //player.setSource(UrlSource(widget.playlist[widget.currentSongIndex].url));
+
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(

@@ -22,11 +22,11 @@ class _MyPlaylistsState extends State<MyPlaylists> {
   List<Playlist> playlistData = [];
 
   Widget getNameDialog(BuildContext context) {
-    TextEditingController _nameController = TextEditingController();
+    TextEditingController nameController = TextEditingController();
 
     return Dialog(
       backgroundColor: theme.canvasColor,
-      child: Container(
+      child: SizedBox(
         height: 230,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -39,7 +39,7 @@ class _MyPlaylistsState extends State<MyPlaylists> {
               width: 200,
               child: TextFormField(
                 textAlignVertical: TextAlignVertical.center,
-                controller: _nameController,
+                controller: nameController,
                 decoration: InputDecoration(
                   hintText: 'Name of Playlist',
                   border: OutlineInputBorder(
@@ -53,7 +53,7 @@ class _MyPlaylistsState extends State<MyPlaylists> {
             ElevatedButton(
               onPressed: () {
                 playlists.add({
-                  'name': _nameController.text.toString(),
+                  'name': nameController.text.toString(),
                   'created_by': user?.uid,
                   'songIds': <String>[],
                   'imageUrl': '',

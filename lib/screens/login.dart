@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
 import 'package:sonata/constants.dart';
 import 'package:sonata/screens/home.dart';
 import 'package:sonata/utility/helper_widgets.dart';
-import 'package:sonata/utility/theme_manager.dart';
 
 enum AuthMode {
   Login,

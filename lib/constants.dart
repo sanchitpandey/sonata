@@ -21,8 +21,8 @@ TextStyle kBaseFont = const TextStyle(fontSize: 24, fontFamily: 'RaleWay');
 FirebaseAuth auth = FirebaseAuth.instance;
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 User? user = auth.currentUser!;
-CollectionReference playlists =
-FirebaseFirestore.instance.collection('playlists'), users = FirebaseFirestore.instance.collection('users');
+CollectionReference playlists = FirebaseFirestore.instance.collection('playlists'),
+    users = FirebaseFirestore.instance.collection('users');
 
 List<Song> songs = [
   Song(
